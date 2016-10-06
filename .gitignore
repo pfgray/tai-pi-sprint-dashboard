@@ -1,3 +1,6 @@
+# Property files
+*.properties
+
 # Vim
 *.swp
 
@@ -10,3 +13,8 @@ src_managed/
 project/boot/
 .history
 .cache
+
+# Intellij
+.idea
+
+
