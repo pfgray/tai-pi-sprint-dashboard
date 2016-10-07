@@ -1,7 +1,3 @@
-const req = new XMLHttpRequest();
-req.open('GET', '/js/samples/current-sprint.json', true);
-req.send(null);
-
 const getTitle = function(data) {
     return data.sprint + ' -- ' +  data.days_remaining + ' day(s) remaining';
 };
@@ -39,10 +35,4 @@ const renderChart = function(data) {
             }
         }
     );
-};
-
-req.onreadystatechange = function () {
-    if (req.readyState == 4 && req.status == 200) {
-        renderChart(JSON.parse(req.responseText));
-    }
 };
