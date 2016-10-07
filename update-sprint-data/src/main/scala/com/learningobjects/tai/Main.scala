@@ -1,8 +1,6 @@
 package com.learningobjects.tai
 
-import java.io.FileInputStream
-import java.net.HttpCookie
-import java.util.Properties
+import play.api.libs.json.Json
 
 import scalaj.http._
 
@@ -18,17 +16,10 @@ object Main {
     val cookies = Jira.authenticate(username, password)
 
     val request = Http(Urls.fromPath("/rest/api/2/issue/ABC-6782")).cookies(cookies)
+    val response = request.asString
+    val json = Json.parse(response.body)
 
-    println(s"DEBUG: ${request.asString}")
-  }
-
-  /**
-    *     (っ˘ڡ˘ς)
-    */
-  lazy val properties = {
-    val prop = new Properties()
-    prop.load(new FileInputStream("run.properties"))
-    prop
+    println(s"DEBUG: ${Json.prettyPrint(json)}")
   }
 
   /**
@@ -44,38 +35,4 @@ object Main {
     (username, new String(password))
   }
 
-  /**
-    *     (↼_↼)
-    */
-  object Jira {
-
-    def authenticate(username:String, password: String): IndexedSeq[HttpCookie] = {
-
-      val payload = s"""
-                       | {
-                       |   "username": "${username}",
-                       |   "password": "${password}"
-                       | }
-       """.stripMargin
-
-      val request = Http(Urls.Auth).header("content-type", "application/json")
-        .postData(payload)
-
-      val response = request.asString
-
-      response.cookies
-    }
-  }
-
-  /**
-    *     (⇀_⇀)
-    */
-  object Urls {
-
-    private lazy val host = properties.getProperty("jira.host")
-
-    def fromPath(path:String)  = s"$host$path"
-
-    val Auth = fromPath("/rest/auth/1/session")
-  }
 }
