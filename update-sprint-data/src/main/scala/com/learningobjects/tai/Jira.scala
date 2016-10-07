@@ -7,7 +7,7 @@ import scalaj.http.Http
 /**
   *     (↼_↼)
   */
-object Jira {
+object JIRA {
 
   def authenticate(username:String, password: String): IndexedSeq[HttpCookie] = {
 

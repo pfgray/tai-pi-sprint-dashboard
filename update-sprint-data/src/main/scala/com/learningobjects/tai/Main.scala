@@ -13,7 +13,7 @@ object Main {
 
     val (username, password) = readCredentials
 
-    val cookies = Jira.authenticate(username, password)
+    val cookies = JIRA.authenticate(username, password)
 
     val request = Http(Urls.fromPath("/rest/api/2/issue/ABC-6782")).cookies(cookies)
     val response = request.asString
