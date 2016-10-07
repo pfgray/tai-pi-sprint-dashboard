@@ -12,6 +12,20 @@ case class Sprint(
   daysRemaining: Long
 )
 
+//
+// TODO: extracting parentId, parentKey, points when properties
+//       sometimes absent from JSON.
+//
+
+//
+// Want to know what would be nice?
+//   If a property doesn't have a value, then JIRA would return json with a
+//     property with a null value.
+//
+// Want to know what's going on?
+//   JIRA omits properties without values, and Play JSON cannot deserialize
+//     using Reads/validate pattern. =(
+//
 trait BaseIssue {
   def id: Long
   def key: String // E.g., ABC-123
