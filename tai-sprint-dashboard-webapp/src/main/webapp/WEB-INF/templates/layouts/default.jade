@@ -1,12 +1,12 @@
--@ val title: String
--@ val headline: String = title
+-@ val pageTitle: String
 -@ val body: String
 
 !!!
 html
   head
-    title= title
+    title = pageTitle
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.bundle.min.js')
   body
     #content
-      h1= headline
       != body
+    script(src='js/chart.js')
