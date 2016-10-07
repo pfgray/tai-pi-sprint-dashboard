@@ -16,8 +16,8 @@ const getDayLabels = function (data) {
     }
     return _.map(days, function (d) {
         return d.toLocaleString('en-US', {weekday: 'short'})
-        + ' ' + d.toLocaleString('en-US', {month: '2-digit'})
-        + '/' + d.toLocaleString('en-US', {day: '2-digit'});
+            + ' ' + d.toLocaleString('en-US', {month: '2-digit'})
+            + '/' + d.toLocaleString('en-US', {day: '2-digit'});
     });
 };
 
