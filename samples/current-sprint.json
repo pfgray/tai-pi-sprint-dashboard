@@ -3,6 +3,7 @@
     "remaining": 28.5,
     "completed": 22.5,
     "last_update": "2016-10-05T12:00:00Z",
+    "days_remaining": 4,
     "history": [
         {
             "date": "2016-10-05",
@@ -20,7 +21,7 @@
             "completed": 13.25
         },
         {
-            "date": "2016-10-10",
+            "date": "2016-10-08",
             "remaining": 34.0,
             "completed": 15.75
         },
