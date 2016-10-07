@@ -1,8 +1,6 @@
 package com.learningobjects.tai
 
-import play.api.libs.json.Json
-
-import scalaj.http._
+import java.net.HttpCookie
 
 object Main {
 
@@ -13,13 +11,11 @@ object Main {
 
     val (username, password) = readCredentials
 
-    val cookies = JIRA.authenticate(username, password)
+    implicit val cookies: IndexedSeq[HttpCookie] = JIRA.authenticate(username, password)
 
-    val request = Http(Urls.fromPath("/rest/api/2/issue/ABC-6782")).cookies(cookies)
-    val response = request.asString
-    val json = Json.parse(response.body)
-
-    println(s"DEBUG: ${Json.prettyPrint(json)}")
+    val sprint = JIRA.activeSprint()
+    val issues = JIRA.issues(sprint.id)
+    issues.foreach(i => println(s"DEBUG: ${i}"))
   }
 
   /**
