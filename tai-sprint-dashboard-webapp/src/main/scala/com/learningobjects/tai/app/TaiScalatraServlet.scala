@@ -15,7 +15,10 @@ class TaiScalatraServlet extends TaiSprintDashboardWebappStack {
   }
 
   post("/speakit") {
-    val result = s"echo '${params.get("text")}' | festival --tts" !
+    val command = s"echo '${params.get("text")}' " #| "festival --tts"
+    //println(s"Executing: $command")
+    val result: Int = (command !)
+    println(s"Got result: $result")
     redirect("/speak")
   }
 
