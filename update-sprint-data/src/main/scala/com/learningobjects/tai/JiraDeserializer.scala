@@ -81,13 +81,20 @@ object JiraDeserializer {
   implicit val issueReads: Reads[Issue] = (
     (JsPath \ "id").read[Long] and
       (JsPath \ "key").read[String] and
-      //      (JsPath \ "parentId").readNullable[Long] and
-      //      (JsPath \ "parentKey").readNullable[String] and
       (JsPath \ "typeName").read[String] and
       (JsPath \ "summary").read[String] and
       (JsPath \ "done").read[Boolean] and
-      (JsPath \ "statusName").read[String]
-    //      (JsPath \ "estimateStatistic" \ "statFieldValue" \ "value" ).readNullable[Double]
+      (JsPath \ "statusName").read[String] and
+      (JsPath \ "parentId").readNullable[Long] and
+      (JsPath \ "parentKey").readNullable[String] and
+
+      //
+      // TODO: can't figure out how to handle optional estimateStatistic property,
+      //       so using None and setting later.
+      //
+
+      //      (JsPath \ "estimateStatistic" \ "statFieldValue" \ "value" ).readNullable[Double]
+      Reads.pure(None)
     )(Issue.apply _)
 
 
@@ -99,6 +106,12 @@ object JiraDeserializer {
   /**
     *
     */
-  def issue(json: JsValue): Issue = json.validate[Issue].get
+  def issue(json: JsValue): Issue = {
+    val pointsResult = json \ "estimateStatistic" \ "statFieldValue" \ "value"
+    json.validate[Issue]
+        .map(_.copy(points = pointsResult.toOption.map(_.as[Double])))
+        .get
+  }
+
   
 }
