@@ -44,8 +44,8 @@ object JiraDeserializer {
     *     "typeName": "Sub-task",
     *     "typeId": "5",
     *     "summary": "(OBE) Update LTI documentation to include line item extensions",
-    *     "typeUrl": "https://foo.com/jira/images/icons/issuetypes/subtask_alternate.png",
-    *     "priorityUrl": "https://foo.com/jira/images/icons/priorities/major.png",
+    *     "typeUrl": "https://example.org/jira/images/icons/issuetypes/subtask_alternate.png",
+    *     "priorityUrl": "https://example.org/jira/images/icons/priorities/major.png",
     *     "priorityName": "Major",
     *     "done": true,
     *     "hasCustomUserAvatar": false,
@@ -59,12 +59,12 @@ object JiraDeserializer {
     *     },
     *     "statusId": "10001",
     *     "statusName": "Done",
-    *     "statusUrl": "https://foo.com/jira/images/icons/subtask.gif",
+    *     "statusUrl": "https://example.org/jira/images/icons/subtask.gif",
     *     "status": {
     *       "id": "10001",
     *       "name": "Done",
     *       "description": "",
-    *       "iconUrl": "https://foo.com/jira/images/icons/subtask.gif",
+    *       "iconUrl": "https://example.org/jira/images/icons/subtask.gif",
     *       "statusCategory": {
     *       "id": "3",
     *       "key": "done",
@@ -100,5 +100,5 @@ object JiraDeserializer {
     *
     */
   def issue(json: JsValue): Issue = json.validate[Issue].get
-
+  
 }
