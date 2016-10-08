@@ -14,7 +14,7 @@ class JiraDeserializerTest extends FlatSpec with Matchers {
         | {
         |    "id": 510,
         |    "sequence": 510,
-        |    "name": "Pied Piper Sprint 15",
+        |    "name": "Pied Piper 13",
         |    "state": "ACTIVE",
         |    "linkedPagesCount": 0,
         |    "startDate": "05/Oct/16 1:00 AM",
@@ -26,7 +26,7 @@ class JiraDeserializerTest extends FlatSpec with Matchers {
       """.stripMargin
     val sprint = JiraDeserializer.sprint(Json.parse(json))
     sprint.id should equal(510)
-    sprint.name should equal("Pied Piper Sprint 15")
+    sprint.name should equal("Pied Piper 13")
     sprint.startDate should equal("05/Oct/16 1:00 AM")
     sprint.endDate should equal("19/Oct/16 1:00 AM")
     sprint.daysRemaining should equal(8)

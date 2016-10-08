@@ -31,7 +31,7 @@ object JIRA {
   /**
     *
     */
-  def activeSprint()(implicit cookies:IndexedSeq[HttpCookie]): Sprint = {
+  def activeSprint()(implicit cookies:IndexedSeq[HttpCookie]): Option[Sprint] = {
 
     val request = Http(Urls.AllData).cookies(cookies)
       .param("rapidViewId", rapidViewId.toString)
@@ -42,8 +42,7 @@ object JIRA {
       .as[JsArray]
       .value
       .map(JiraDeserializer.sprint)
-      .find(_.name.startsWith("Team Admin "))
-      .get
+      .find(_.name.startsWith(Props.SprintPrefix.get))
   }
 
   /**

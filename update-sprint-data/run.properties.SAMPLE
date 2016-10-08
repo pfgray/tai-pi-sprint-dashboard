@@ -1,2 +1,3 @@
 # Rename this file to "run.properties" and edit values below
 jira.host=https://foo.com/jira
+sprint.prefix=Pied Piper Sprint

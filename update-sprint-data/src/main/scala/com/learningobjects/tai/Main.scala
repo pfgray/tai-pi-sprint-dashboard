@@ -13,9 +13,10 @@ object Main {
 
     implicit val cookies: IndexedSeq[HttpCookie] = JIRA.authenticate(username, password)
 
-    val sprint = JIRA.activeSprint()
-    val issues = JIRA.issues(sprint.id)
-    issues.foreach(i => println(s"DEBUG: ${i}"))
+    JIRA.activeSprint.foreach(sprint => {
+      val issues = JIRA.issues(sprint.id)
+      issues.foreach(i => println(s"DEBUG: ${i}"))
+    })
   }
 
   /**

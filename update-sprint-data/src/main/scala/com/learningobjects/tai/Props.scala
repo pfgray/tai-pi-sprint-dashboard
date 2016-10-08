@@ -17,6 +17,7 @@ object Props {
   private def prop(key:String): Option[String] = Option(properties.getProperty(key))
 
   lazy val JiraHost = prop("jira.host")
+  lazy val SprintPrefix = prop("sprint.prefix")
 
   //
   // For development-purposes only.
