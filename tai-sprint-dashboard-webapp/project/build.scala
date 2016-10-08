@@ -4,6 +4,8 @@ import org.scalatra.sbt._
 import org.scalatra.sbt.PluginKeys._
 import com.earldouglas.xwp.JettyPlugin
 import com.mojolly.scalate.ScalatePlugin._
+import sbtassembly.AssemblyPlugin._
+import sbtassembly.AssemblyKeys._
 import ScalateKeys._
 
 object TaiSprintDashboardWebappBuild extends Build {
@@ -13,10 +15,10 @@ object TaiSprintDashboardWebappBuild extends Build {
   val ScalaVersion = "2.11.8"
   val ScalatraVersion = "2.4.1"
 
-  lazy val project = Project (
+  lazy val project = Project(
     "tai-sprint-dashboard-webapp",
     file("."),
-    settings = ScalatraPlugin.scalatraSettings ++ scalateSettings ++ Seq(
+    settings = ScalatraPlugin.scalatraSettings ++ scalateSettings ++ assemblySettings ++ Seq(
       organization := Organization,
       name := Name,
       version := Version,
@@ -28,17 +30,19 @@ object TaiSprintDashboardWebappBuild extends Build {
         "org.scalatra" %% "scalatra-scalate" % ScalatraVersion,
         "org.scalatra" %% "scalatra-specs2" % ScalatraVersion % "test",
         "ch.qos.logback" % "logback-classic" % "1.1.5" % "runtime",
-        "org.eclipse.jetty" % "jetty-webapp" % "9.2.15.v20160210" % "container",
+        "org.eclipse.jetty" % "jetty-webapp" % "9.2.15.v20160210" % "container;compile",
         "javax.servlet" % "javax.servlet-api" % "3.1.0" % "provided"
       ),
-      scalateTemplateConfig in Compile <<= (sourceDirectory in Compile){ base =>
+      assemblyDefaultJarName in assembly := s"tai-dashboard-${Version}.jar",
+      mainClass in assembly := Some("com.learningobjects.tai.app.JettyLauncher"),
+      scalateTemplateConfig in Compile <<= (sourceDirectory in Compile) { base =>
         Seq(
           TemplateConfig(
             base / "webapp" / "WEB-INF" / "templates",
-            Seq.empty,  /* default imports should be added here */
+            Seq.empty, /* default imports should be added here */
             Seq(
               Binding("context", "_root_.org.scalatra.scalate.ScalatraRenderContext", importMembers = true, isImplicit = true)
-            ),  /* add extra bindings here */
+            ), /* add extra bindings here */
             Some("templates")
           )
         )
