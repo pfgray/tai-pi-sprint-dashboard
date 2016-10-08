@@ -22,13 +22,18 @@ object Main {
     *     ( ˘▽˘)っ♨
     */
   def readCredentials = {
-    print("Username: ")
-    val username = Console.in.readLine()
 
-    print("Password: ")
-    val password = System.console().readPassword()
+    val username = Props.JiraUsername.getOrElse({
+      print("Username: ")
+      Console.in.readLine()
+    })
 
-    (username, new String(password))
+    val password = Props.JiraPassword.getOrElse({
+      print("Password: ")
+      new String(System.console().readPassword())
+    })
+
+    (username, password)
   }
 
 }

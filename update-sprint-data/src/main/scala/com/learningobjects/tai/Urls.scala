@@ -5,7 +5,7 @@ package com.learningobjects.tai
   */
 object Urls {
 
-  private lazy val host = Props.JiraHost
+  private lazy val host = Props.JiraHost.get
 
   def fromPath(path:String)  = s"$host$path"
 

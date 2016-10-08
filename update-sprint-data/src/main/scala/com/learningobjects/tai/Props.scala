@@ -14,6 +14,14 @@ object Props {
     prop
   }
 
-  lazy val JiraHost = properties.getProperty("jira.host")
+  private def prop(key:String): Option[String] = Option(properties.getProperty(key))
+
+  lazy val JiraHost = prop("jira.host")
+
+  //
+  // For development-purposes only.
+  //
+  lazy val JiraUsername = prop("jira.username")
+  lazy val JiraPassword = prop("jira.password")
 
 }
