@@ -1,4 +1,4 @@
 # Rename this file to "run.properties" and edit values below
 jira.host=https://foo.com/jira
-jira.rapidviewid=123
+jira.rapidViewId=123
 sprint.prefix=Pied Piper Sprint

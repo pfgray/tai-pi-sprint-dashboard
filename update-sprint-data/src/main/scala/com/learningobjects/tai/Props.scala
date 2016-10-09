@@ -25,7 +25,7 @@ object Props {
   private def prop(key:String): Option[String] = Option(properties.getProperty(key))
 
   lazy val JiraHost = prop("jira.host")
-  lazy val JiraRapidViewId = prop("jira.rapidviewid")
+  lazy val JiraRapidViewId = prop("jira.rapidViewId")
   lazy val SprintPrefix = prop("sprint.prefix")
 
   //
