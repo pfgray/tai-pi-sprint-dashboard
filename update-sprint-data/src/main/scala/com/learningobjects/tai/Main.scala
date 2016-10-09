@@ -14,8 +14,17 @@ object Main {
     implicit val cookies: IndexedSeq[HttpCookie] = Jira.authenticate(username, password)
 
     Jira.activeSprint.foreach(sprint => {
-      val issues = Jira.issuesFromSprint(sprint.id)
-      issues.foreach(i => println(s"DEBUG: ${i}"))
+      Jira.issueSummaries(sprint.id)
+          .foreach(summary => {
+            val issue = Jira.issue(summary.key)
+
+            //
+            // TODO:
+            //   1. Create graph using subtasks, parent fields
+            //   2. Generate JSON using done, resolutionDate, points
+            //
+            println(s"DEBUG: $issue")
+          })
     })
   }
 

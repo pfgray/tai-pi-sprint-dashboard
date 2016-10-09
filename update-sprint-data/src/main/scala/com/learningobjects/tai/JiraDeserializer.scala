@@ -1,7 +1,7 @@
 package com.learningobjects.tai
 
 import play.api.libs.functional.syntax._
-import play.api.libs.json._
+import play.api.libs.json.{Reads, _}
 
 /**
   *     =O
@@ -9,22 +9,9 @@ import play.api.libs.json._
 object JiraDeserializer {
 
   /**
-    * e.g.,
-    *   {
-    *     "id": 510,
-    *     "sequence": 510,
-    *     "name": "Pied Piper Sprint 15",
-    *     "state": "ACTIVE",
-    *     "linkedPagesCount": 0,
-    *     "startDate": "05/Oct/16 1:00 AM",
-    *     "endDate": "19/Oct/16 1:00 AM",
-    *     "completeDate": "None",
-    *     "remoteLinks": [],
-    *     "daysRemaining": 8
-    *   }
+    *
     */
-
-  implicit val sprintReads: Reads[Sprint] = (
+  private implicit val sprintReads: Reads[Sprint] = (
     (JsPath \ "id").read[Long] and
       (JsPath \ "name").read[String] and
       (JsPath \ "startDate").read[String] and
@@ -33,52 +20,9 @@ object JiraDeserializer {
     )(Sprint.apply _)
 
   /**
-    * E.g.,
     *
-    *   {
-    *     "id": 61426,
-    *     "key": "ABC-6322",
-    *     "hidden": false,
-    *     "parentId": 60918,
-    *     "parentKey": "ABC-6019",
-    *     "typeName": "Sub-task",
-    *     "typeId": "5",
-    *     "summary": "(OBE) Update LTI documentation to include line item extensions",
-    *     "typeUrl": "https://example.org/jira/images/icons/issuetypes/subtask_alternate.png",
-    *     "priorityUrl": "https://example.org/jira/images/icons/priorities/major.png",
-    *     "priorityName": "Major",
-    *     "done": true,
-    *     "hasCustomUserAvatar": false,
-    *     "color": "#009999",
-    *     "estimateStatistic": {
-    *       "statFieldId": "customfield_10008",
-    *       "statFieldValue": {
-    *         "value": 0,
-    *         "text": "0"
-    *       }
-    *     },
-    *     "statusId": "10001",
-    *     "statusName": "Done",
-    *     "statusUrl": "https://example.org/jira/images/icons/subtask.gif",
-    *     "status": {
-    *       "id": "10001",
-    *       "name": "Done",
-    *       "description": "",
-    *       "iconUrl": "https://example.org/jira/images/icons/subtask.gif",
-    *       "statusCategory": {
-    *       "id": "3",
-    *       "key": "done",
-    *         "colorName": "green"
-    *       }
-    *     },
-    *     "fixVersions": [
-    *       13435
-    *     ],
-    *     "projectId": 11105,
-    *     "linkedPagesCount": 0
-    *   }
     */
-  implicit val issueFromSprintReads: Reads[IssueFromSprint] = (
+  private implicit val issueSummaryReads: Reads[IssueSummary] = (
     (JsPath \ "id").read[Long] and
       (JsPath \ "key").read[String] and
       (JsPath \ "typeName").read[String] and
@@ -95,8 +39,28 @@ object JiraDeserializer {
 
       //      (JsPath \ "estimateStatistic" \ "statFieldValue" \ "value" ).readNullable[Double]
       Reads.pure(None)
-    )(IssueFromSprint.apply _)
+    )(IssueSummary.apply _)
 
+  /**
+    *
+    */
+  private implicit val issueReads: Reads[Issue] = {
+    val issueDate = (JsPath \ "fields" \ "resolutiondate").readNullable[String]
+    (
+      (JsPath \ "id").read[String].map(_.toLong) and
+        (JsPath \ "key").read[String] and
+        (JsPath \ "fields" \ "issuetype" \ "name").read[String] and
+        (JsPath \ "fields" \ "summary").read[String] and
+        (JsPath \ "fields" \ "status" \ "name").read[String] and
+        issueDate.map(_.isDefined) and
+        issueDate and
+        Reads.pure(None) and
+        Reads.pure(None) and
+        (JsPath \ "fields" \ "customfield_10008").readNullable[Double] and
+        Reads.pure(Seq())
+//        (JsPath \ "fields" \ "subtasks" \\ "key").read[Seq[String]]
+      )(Issue.apply _)
+  }
 
   /**
     *
@@ -106,12 +70,35 @@ object JiraDeserializer {
   /**
     *
     */
-  def issueFromSprint(json: JsValue): IssueFromSprint = {
+  def issueSummary(json: JsValue): IssueSummary = {
     val pointsResult = json \ "estimateStatistic" \ "statFieldValue" \ "value"
-    json.validate[IssueFromSprint]
+    json.validate[IssueSummary]
         .map(_.copy(points = pointsResult.toOption.map(_.as[Double])))
         .get
   }
 
+  /**
+    *
+    */
+  def issue(json: JsValue): Issue = {
+
+    val subtaskKeys = (json \ "fields" \ "subtasks").as[JsArray]
+          .value
+          .map(subtask => (subtask \ "key").as[String])
+
+    val parentId = (json \ "fields" \ "parent" \ "id")
+      .toOption
+      .map(_.as[String].toLong)
+
+    val parentKey = (json \ "fields" \ "parent" \ "key")
+      .toOption
+      .map(_.as[String])
+
+    json.validate[Issue]
+        .map(_.copy(subtaskKeys = subtaskKeys,
+                    parentId = parentId,
+                    parentKey = parentKey))
+        .get
+  }
   
 }

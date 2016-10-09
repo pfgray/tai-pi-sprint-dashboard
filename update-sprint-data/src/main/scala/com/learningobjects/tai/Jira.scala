@@ -20,12 +20,11 @@ object Jira {
     * See:
     *   /fields/resolutiondate (null, "2016-10-05T20:48:19.381+0000")
     */
-  def issue(issueId:String)(implicit cookies:IndexedSeq[HttpCookie]) = {
-    val request = Http(Urls.Issue+issueId).cookies(cookies)
+  def issue(key:String)(implicit cookies:IndexedSeq[HttpCookie]): Issue = {
+    val request = Http(Urls.Issue+key).cookies(cookies)
     val response = request.asString
-
-    // TODO: Add model
-    Json.parse(response.body)
+    val body = Json.parse(response.body)
+    JiraDeserializer.issue(body)
   }
 
   /**
@@ -48,7 +47,7 @@ object Jira {
   /**
     *
     */
-  def issuesFromSprint(sprintId: Long)(implicit cookies:IndexedSeq[HttpCookie]): Seq[IssueFromSprint] = {
+  def issueSummaries(sprintId: Long)(implicit cookies:IndexedSeq[HttpCookie]): Seq[IssueSummary] = {
 
     val request = Http(Urls.SprintDashboard).cookies(cookies)
       .param("rapidViewId", rapidViewId.toString)
@@ -60,7 +59,7 @@ object Jira {
     (body \ "issuesData" \ "issues")
       .as[JsArray]
       .value
-      .map(JiraDeserializer.issueFromSprint)
+      .map(JiraDeserializer.issueSummary)
   }
 
   /**
