@@ -1,4 +1,5 @@
 # Rename this file to "run.properties" and edit values below
 jira.host=https://foo.com/jira
 jira.rapidViewId=123
+jira.issuePointsFieldName=customfield_123
 sprint.prefix=Pied Piper Sprint

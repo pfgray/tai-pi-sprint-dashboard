@@ -45,6 +45,10 @@ object JiraDeserializer {
     *
     */
   private implicit val issueReads: Reads[Issue] = {
+
+    // Points are a custom field, defined in properties file
+    val pointsFieldName = Props.JiraIssuePointsFieldName.get
+
     val issueDate = (JsPath \ "fields" \ "resolutiondate").readNullable[String]
     (
       (JsPath \ "id").read[String].map(_.toLong) and
@@ -56,7 +60,7 @@ object JiraDeserializer {
         issueDate and
         Reads.pure(None) and
         Reads.pure(None) and
-        (JsPath \ "fields" \ "customfield_10008").readNullable[Double] and
+        (JsPath \ "fields" \ pointsFieldName).readNullable[Double] and
         Reads.pure(Seq())
 //        (JsPath \ "fields" \ "subtasks" \\ "key").read[Seq[String]]
       )(Issue.apply _)

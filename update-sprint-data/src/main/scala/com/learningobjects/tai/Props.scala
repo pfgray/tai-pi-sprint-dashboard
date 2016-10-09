@@ -26,6 +26,7 @@ object Props {
 
   lazy val JiraHost = prop("jira.host")
   lazy val JiraRapidViewId = prop("jira.rapidViewId")
+  lazy val JiraIssuePointsFieldName = prop("jira.issuePointsFieldName")
   lazy val SprintPrefix = prop("sprint.prefix")
 
   //
