@@ -1,0 +1,40 @@
+{
+  "id": 61426,
+  "key": "ABC-6322",
+  "hidden": false,
+  "typeName": "Sub-task",
+  "typeId": "5",
+  "summary": "Update LTI documentation to include line item extensions",
+  "typeUrl": "https://example.org/jira/images/icons/issuetypes/subtask_alternate.png",
+  "priorityUrl": "https://example.org/jira/images/icons/priorities/major.png",
+  "priorityName": "Major",
+  "done": true,
+  "hasCustomUserAvatar": false,
+  "color": "#009999",
+  "estimateStatistic": {
+    "statFieldId": "customfield_10008",
+    "statFieldValue": {
+      "value": 1.5,
+      "text": "1.5"
+    }
+  },
+  "statusId": "10001",
+  "statusName": "Done",
+  "statusUrl": "https://example.org/jira/images/icons/subtask.gif",
+  "status": {
+    "id": "10001",
+    "name": "Done",
+    "description": "",
+    "iconUrl": "https://example.org/jira/images/icons/subtask.gif",
+    "statusCategory": {
+      "id": "3",
+      "key": "done",
+      "colorName": "green"
+    }
+  },
+  "fixVersions": [
+    13435
+  ],
+  "projectId": 11105,
+  "linkedPagesCount": 0
+}

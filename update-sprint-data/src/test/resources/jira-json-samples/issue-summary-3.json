@@ -1,0 +1,35 @@
+{
+  "id":58576,
+  "key":"ABC-3328",
+  "hidden":false,
+  "typeName":"Epic",
+  "typeId":"10000",
+  "summary":"Middle-out compression algorithm should handle 3d video",
+  "typeUrl":"https://example.org/jira/images/icons/ico_epic.png",
+  "priorityUrl":"https://piedpiper.com/jira/images/icons/priorities/critical.png",
+  "priorityName":"Critical",
+  "done":false,
+  "assignee":"rhendrinks",
+  "assigneeName":"Richard Hendricks",
+  "hasCustomUserAvatar":false,
+  "color":"#888720",
+  "statusId":"10000",
+  "statusName":"To Do",
+  "statusUrl":"https://piedpiper.com/jira/images/icons/subtask.gif",
+  "status":{
+    "id":"10000",
+    "name":"To Do",
+    "description":"",
+    "iconUrl":"https://piedpiper.com/jira/images/icons/subtask.gif",
+    "statusCategory":{
+      "id":"2",
+      "key":"new",
+      "colorName":"blue-gray"
+    }
+  },
+  "fixVersions":[
+    13436
+  ],
+  "projectId":11105,
+  "linkedPagesCount":0
+}
