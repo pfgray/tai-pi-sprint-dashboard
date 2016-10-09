@@ -9,7 +9,7 @@ import scalaj.http.Http
 /**
   *     (↼_↼)
   */
-object JIRA {
+object Jira {
 
   // Magic number
   private val rapidViewId = 130
@@ -21,7 +21,7 @@ object JIRA {
     *   /fields/resolutiondate (null, "2016-10-05T20:48:19.381+0000")
     */
   def issue(issueId:String)(implicit cookies:IndexedSeq[HttpCookie]) = {
-    val request = Http(Urls.IssuePartial+issueId).cookies(cookies)
+    val request = Http(Urls.Issue+issueId).cookies(cookies)
     val response = request.asString
 
     // TODO: Add model
@@ -33,7 +33,7 @@ object JIRA {
     */
   def activeSprint()(implicit cookies:IndexedSeq[HttpCookie]): Option[Sprint] = {
 
-    val request = Http(Urls.AllData).cookies(cookies)
+    val request = Http(Urls.SprintDashboard).cookies(cookies)
       .param("rapidViewId", rapidViewId.toString)
     val response = request.asString
     val body = Json.parse(response.body)
@@ -48,9 +48,9 @@ object JIRA {
   /**
     *
     */
-  def issues(sprintId: Long)(implicit cookies:IndexedSeq[HttpCookie]): Seq[Issue] = {
+  def issuesFromSprint(sprintId: Long)(implicit cookies:IndexedSeq[HttpCookie]): Seq[IssueFromSprint] = {
 
-    val request = Http(Urls.AllData).cookies(cookies)
+    val request = Http(Urls.SprintDashboard).cookies(cookies)
       .param("rapidViewId", rapidViewId.toString)
       .param("activeSprints", sprintId.toString)
     val response = request.asString
@@ -60,7 +60,7 @@ object JIRA {
     (body \ "issuesData" \ "issues")
       .as[JsArray]
       .value
-      .map(JiraDeserializer.issue)
+      .map(JiraDeserializer.issueFromSprint)
   }
 
   /**

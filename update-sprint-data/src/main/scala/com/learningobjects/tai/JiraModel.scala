@@ -24,7 +24,7 @@ trait BaseIssue {
   def points: Option[Double]
 }
 
-case class Issue(
+case class IssueFromSprint(
   id: Long,
   key: String,
   typeName: String,
@@ -36,7 +36,7 @@ case class Issue(
   points: Option[Double] = None
 ) extends BaseIssue
 
-case class IssueWithResolutionDate(
+case class Issue(
   id: Long,
   key: String,
   typeName: String,

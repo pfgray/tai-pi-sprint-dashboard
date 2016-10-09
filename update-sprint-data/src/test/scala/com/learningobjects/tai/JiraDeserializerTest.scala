@@ -78,7 +78,7 @@ class JiraDeserializerTest extends FlatSpec with Matchers {
         |    "linkedPagesCount": 0
         | }
       """.stripMargin
-    val issue = JiraDeserializer.issue(Json.parse(json))
+    val issue = JiraDeserializer.issueFromSprint(Json.parse(json))
     issue.id should equal(61426)
     issue.key should equal("ABC-6322")
     issue.typeName should equal("Sub-task")
@@ -134,7 +134,7 @@ class JiraDeserializerTest extends FlatSpec with Matchers {
         |    "linkedPagesCount": 0
         | }
       """.stripMargin
-    val issue = JiraDeserializer.issue(Json.parse(json))
+    val issue = JiraDeserializer.issueFromSprint(Json.parse(json))
     issue.id should equal(61426)
     issue.key should equal("ABC-6322")
     issue.typeName should equal("Sub-task")
@@ -186,7 +186,7 @@ class JiraDeserializerTest extends FlatSpec with Matchers {
         |}
       """.stripMargin
 
-    val issue = JiraDeserializer.issue(Json.parse(json))
+    val issue = JiraDeserializer.issueFromSprint(Json.parse(json))
     issue.id should equal(58576)
     issue.key should equal("ABC-3328")
     issue.typeName should equal("Epic")

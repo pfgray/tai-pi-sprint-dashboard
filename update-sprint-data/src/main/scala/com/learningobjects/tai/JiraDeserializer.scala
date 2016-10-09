@@ -78,7 +78,7 @@ object JiraDeserializer {
     *     "linkedPagesCount": 0
     *   }
     */
-  implicit val issueReads: Reads[Issue] = (
+  implicit val issueFromSprintReads: Reads[IssueFromSprint] = (
     (JsPath \ "id").read[Long] and
       (JsPath \ "key").read[String] and
       (JsPath \ "typeName").read[String] and
@@ -95,7 +95,7 @@ object JiraDeserializer {
 
       //      (JsPath \ "estimateStatistic" \ "statFieldValue" \ "value" ).readNullable[Double]
       Reads.pure(None)
-    )(Issue.apply _)
+    )(IssueFromSprint.apply _)
 
 
   /**
@@ -106,9 +106,9 @@ object JiraDeserializer {
   /**
     *
     */
-  def issue(json: JsValue): Issue = {
+  def issueFromSprint(json: JsValue): IssueFromSprint = {
     val pointsResult = json \ "estimateStatistic" \ "statFieldValue" \ "value"
-    json.validate[Issue]
+    json.validate[IssueFromSprint]
         .map(_.copy(points = pointsResult.toOption.map(_.as[Double])))
         .get
   }

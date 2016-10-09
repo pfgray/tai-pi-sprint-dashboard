@@ -11,7 +11,7 @@ object Urls {
 
   val Auth = fromPath("/rest/auth/1/session")
 
-  val AllData = fromPath("/rest/greenhopper/1.0/xboard/work/allData.json")
+  val SprintDashboard = fromPath("/rest/greenhopper/1.0/xboard/work/allData.json")
 
-  val IssuePartial = fromPath("/rest/api/2/issue/")
+  val Issue = fromPath("/rest/api/2/issue/")
 }
