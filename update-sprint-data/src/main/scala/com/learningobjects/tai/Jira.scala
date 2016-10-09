@@ -12,7 +12,7 @@ import scalaj.http.Http
 object Jira {
 
   // Magic number
-  private val rapidViewId = 130
+  private val rapidViewId = Props.JiraRapidViewId.get
 
   /**
     * E.g., val issue = JIRA.issue("ABC-6782")
@@ -33,7 +33,7 @@ object Jira {
   def activeSprint()(implicit cookies:IndexedSeq[HttpCookie]): Option[Sprint] = {
 
     val request = Http(Urls.SprintDashboard).cookies(cookies)
-      .param("rapidViewId", rapidViewId.toString)
+      .param("rapidViewId", rapidViewId)
     val response = request.asString
     val body = Json.parse(response.body)
 
@@ -50,7 +50,7 @@ object Jira {
   def issueSummaries(sprintId: Long)(implicit cookies:IndexedSeq[HttpCookie]): Seq[IssueSummary] = {
 
     val request = Http(Urls.SprintDashboard).cookies(cookies)
-      .param("rapidViewId", rapidViewId.toString)
+      .param("rapidViewId", rapidViewId)
       .param("activeSprints", sprintId.toString)
     val response = request.asString
 
