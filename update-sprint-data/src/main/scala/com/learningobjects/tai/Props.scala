@@ -3,14 +3,22 @@ package com.learningobjects.tai
 import java.io.FileInputStream
 import java.util.Properties
 
+import scala.util.Try
+
 /**
   *     (っ˘ڡ˘ς)
   */
 object Props {
 
   private lazy val properties = {
+    val file = "run.properties"
     val prop = new Properties()
-    prop.load(new FileInputStream("run.properties"))
+    val fs = Try(new FileInputStream(file))
+    if (fs.isFailure) {
+      System.err.println(s"Could not find file: $file")
+      System.exit(1)
+    }
+    prop.load(fs.get)
     prop
   }
 
