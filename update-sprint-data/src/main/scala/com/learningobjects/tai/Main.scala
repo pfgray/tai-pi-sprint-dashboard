@@ -14,10 +14,16 @@ object Main {
     implicit val cookies: IndexedSeq[HttpCookie] = Jira.authenticate(username, password)
 
     Jira.activeSprint.foreach(sprint => {
-      Jira.issueSummaries(sprint.id)
-          .foreach(summary => {
-            val issue = Jira.issue(summary.key)
+      val separateIssues =
+        Jira.issueSummaries(sprint.id)
+          .map(summary => Jira.issue(summary.key))
 
+      val issues = JiraUtils.bind(separateIssues)
+
+      println(s"DEBUG: ${separateIssues.size} -> ${issues.size}")
+
+      separateIssues
+          .foreach(issue => {
             //
             // TODO:
             //   1. Create graph using subtasks, parent fields

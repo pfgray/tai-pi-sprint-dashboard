@@ -37,3 +37,30 @@ case class Issue(
   points: Option[Double],
   subtaskKeys: Seq[String]
 )
+
+case class IssueNode(
+  id: Long,
+  key: String,
+  typeName: String,
+  summary: String,
+  statusName: String,
+  done: Boolean,
+  resolutionDate: Option[String],
+  points: Option[Double],
+  children: Seq[IssueNode]
+)
+
+object IssueNode {
+  def apply(issue:Issue) =
+    new IssueNode(
+      id = issue.id,
+      key = issue.key,
+      typeName = issue.typeName,
+      summary = issue.summary,
+      statusName = issue.statusName,
+      done = issue.done,
+      resolutionDate = issue.resolutionDate,
+      points = issue.points,
+      children = Seq()
+    )
+}
