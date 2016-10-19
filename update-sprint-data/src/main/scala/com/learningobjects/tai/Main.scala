@@ -20,17 +20,23 @@ object Main {
 
       val issues = JiraUtils.bind(separateIssues)
 
+      val total = issues.map(JiraUtils.points).sum
+
+      val completed = issues.map(JiraUtils.completedPoints).sum
+
       println(s"DEBUG: ${separateIssues.size} -> ${issues.size}")
 
-      separateIssues
-          .foreach(issue => {
-            //
-            // TODO:
-            //   1. Create graph using subtasks, parent fields
-            //   2. Generate JSON using done, resolutionDate, points
-            //
-            println(s"DEBUG: $issue")
-          })
+      println(s"DEBUG: finished ${completed} out of ${total}")
+
+      issues.foreach(issue => {
+        //
+        // TODO:
+        //   1. Create graph using subtasks, parent fields
+        //   2. Generate JSON using done, resolutionDate, points
+        //
+        println(s"DEBUG: $issue")
+      })
+
     })
   }
 

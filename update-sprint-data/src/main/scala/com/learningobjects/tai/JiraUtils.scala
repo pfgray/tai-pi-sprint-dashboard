@@ -28,4 +28,28 @@ object JiraUtils {
 
     expandedNodes.filterNot(node => findChild(node.key, expandedNodes))
   }
+
+  /**
+    * Returns points:
+    *   - If children, sum up points
+    *   - Else use parent
+    */
+  def points(issue: IssueNode): Double = if (issue.children.isEmpty) {
+    issue.points.getOrElse(0)
+  } else {
+    issue.children
+      .map(_.points.getOrElse(0.0))
+      .sum
+  }
+
+  def completedPoints(issue: IssueNode): Double = if (issue.children.isEmpty) {
+    Some(issue).filter(_.done).flatMap(_.points).getOrElse(0)
+  } else {
+    issue.children
+      .filter(_.done)
+      .map(_.points.getOrElse(0.0))
+      .sum
+  }
+
+
 }

@@ -22,6 +22,24 @@ class JiraUtilsTest extends FlatSpec with Matchers {
       subtaskKeys = subtaskKeys
     )
   }
+  
+  object IssueNode {
+    def apply(points: Double): IssueNode = new IssueNode(
+      id = 1,
+      key = 1.toString,
+      typeName = "",
+      summary = "",
+      statusName = "",
+      done = true,
+      resolutionDate = None,
+      points = Some(points),
+      children = Seq()
+    )
+
+    def apply(points: Double, childrenPoints: Seq[Double]): IssueNode =
+      IssueNode(points).copy(children = childrenPoints map IssueNode.apply)
+
+  }
 
   "JiraUtils" should "return a sequence without any relationships" in {
     val test = Seq(
@@ -76,6 +94,17 @@ class JiraUtilsTest extends FlatSpec with Matchers {
     found.size should be (3)
 
     found(0).children.isEmpty should be (true)
+  }
+
+  it should "return correct point for an issue without children" in {
+    val test = IssueNode(2.5)
+    JiraUtils.points(test) should be (2.5)
+
+  }
+
+  it should "return ignore a parent's points in favor of summing children" in {
+    val test = IssueNode(2.5, Seq(0, 1, 0, .5, 1, 2))
+    JiraUtils.points(test) should be (4.5)
   }
 
 }
