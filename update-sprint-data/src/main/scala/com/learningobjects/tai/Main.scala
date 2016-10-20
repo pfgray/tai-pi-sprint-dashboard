@@ -1,8 +1,8 @@
 package com.learningobjects.tai
 
+import java.io.{BufferedWriter, File, FileWriter}
 import java.net.HttpCookie
 import java.text.SimpleDateFormat
-import java.util.Locale
 
 import org.joda.time.DateTime
 
@@ -13,15 +13,30 @@ object Main {
     */
   def main(args: Array[String]): Unit = {
 
+    if (args.length != 1) {
+      Console.err.println("Expecting 1 argument: path to output")
+      System.exit(1)
+    }
+
     val (username, password) = readCredentials
 
     implicit val cookies: IndexedSeq[HttpCookie] = Jira.authenticate(username, password)
+
+    val file = new File(args(0))
+    val exists = file.exists()
+    val bw = new BufferedWriter(new FileWriter(file, true))
+
+    if (!exists) {
+      val header = s""""Name","Start","End","Now","Completed","Total"\n"""
+      bw.write(header)
+    }
 
     Jira.activeSprint.foreach(sprint => {
 
       // Current sprint start date
       val format = new SimpleDateFormat("dd/MMM/yy hh:mm a")
       val sprintStart = format.parse(sprint.startDate)
+      val sprintEnd = format.parse(sprint.endDate)
 
       // Filter out anything from before this sprint
       val separateIssues =
@@ -37,18 +52,12 @@ object Main {
       val total = issues.map(JiraUtils.points).sum
       val completed = issues.map(JiraUtils.completedPoints).sum
 
-      println(s"DEBUG: finished ${completed} out of ${total}")
+      val data = s""""${sprint.name}",${sprintStart.getTime},${sprintEnd.getTime},${System.currentTimeMillis()},${completed},${total}\n"""
 
-      issues.foreach(issue => {
-        //
-        // TODO:
-        //   1. Create graph using subtasks, parent fields
-        //   2. Generate JSON using done, resolutionDate, points
-        //
-//        println(s"DEBUG: $issue")
-      })
-
+      bw.write(data)
     })
+
+    bw.close
   }
 
   /**

@@ -11,7 +11,7 @@ Note this has a few requirements:
 * You have a custom property used for assigning points to tickets
 * If you use subtasks, you want your burndown calculated from subtasks instead of stories. 
 
-## How it works
+### How it works
 
 If not using subtasks, burndown status is calculated from points and completion status from stories.
 
@@ -27,6 +27,30 @@ This can handle a combination of stories with and without subtasks, using the ab
 4. Set `jira.rapidViewId` to the rapid view ID for your agile board. (Used to fetch your agile board.)
 5. Set `jira.issuePointsFieldName` to the custom field name corresponding to your points field.
 6. Set `sprint.prefix` to a common String prefix for your sprints. (Used for identifying active sprint.)
+
+### Build
+
+Fat jar:
+
+```
+sbt assembly
+```
+
+### Run
+
+```
+java -jar target/scala-2.11/update-sprint-data-assembly-1.0.jar ~/Desktop/sprint-data.csv
+```
+
+### Output
+
+Data is appended to supplied file. If file doesn't exist, it is created with header. E.g.,
+
+```
+"Name","Start","End","Now","Completed","Total"
+"Pied Piper Sprint 13",1476849660000,1478059140000,1476921669773,0.0,38.0
+"Pied Piper Sprint 13",1476849660000,1478059140000,1476921683617,2.5,40.5
+```
 
 ## tai-sprint-dashboard-webapp ##
 A web application which displays the data fetched from JIRA
