@@ -1,12 +1,11 @@
-import sbt._
-import Keys._
-import org.scalatra.sbt._
-import org.scalatra.sbt.PluginKeys._
 import com.earldouglas.xwp.JettyPlugin
+import com.mojolly.scalate.ScalatePlugin.ScalateKeys._
 import com.mojolly.scalate.ScalatePlugin._
-import sbtassembly.AssemblyPlugin._
+import org.scalatra.sbt._
+import sbt.Keys._
+import sbt._
 import sbtassembly.AssemblyKeys._
-import ScalateKeys._
+import sbtassembly.AssemblyPlugin._
 
 object TaiSprintDashboardWebappBuild extends Build {
   val Organization = "com.learningobjects.tai"
@@ -34,6 +33,16 @@ object TaiSprintDashboardWebappBuild extends Build {
         "javax.servlet" % "javax.servlet-api" % "3.1.0" % "provided"
       ),
       assemblyDefaultJarName in assembly := s"tai-dashboard-${Version}.jar",
+      resourceGenerators in Compile <+= (resourceManaged, baseDirectory) map {
+        (managedBase, base) =>
+          val webappBase = base / "src" / "main" / "webapp"
+          for {
+            (from, to) <- webappBase ** "*" x rebase(webappBase, managedBase / "main" / "webapp")
+          } yield {
+            Sync.copy(from, to)
+            to
+          }
+      },
       mainClass in assembly := Some("com.learningobjects.tai.app.JettyLauncher"),
       scalateTemplateConfig in Compile <<= (sourceDirectory in Compile) { base =>
         Seq(
