@@ -4,8 +4,8 @@ import sys
 from Adafruit_LED_Backpack import SevenSegment
 
 SEG_ADDRS = [
-    0x70, # completed
-    0x71  # remaining
+    0x70, # green
+    0x71  # red
 ]
 
 class Display:
@@ -21,7 +21,7 @@ class Display:
         
 
 if len(sys.argv) < 3:
-    raise Exception("Insufficient arguments specified, expected (completed, remaining)")
+    raise Exception("Insufficient arguments specified, expected (green, red)")
 
 displays = map(lambda addr: Display(addr), SEG_ADDRS)
 strings = sys.argv[1:3]
