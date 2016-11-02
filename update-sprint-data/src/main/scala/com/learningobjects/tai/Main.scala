@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat
 
 import org.joda.time.DateTime
 
+import sys.process._
+
 object Main {
 
   /**
@@ -53,6 +55,9 @@ object Main {
       val completed = issues.map(JiraUtils.completedPoints).sum
 
       val data = s""""${sprint.name}",${sprintStart.getTime},${sprintEnd.getTime},${System.currentTimeMillis()},${completed},${total}\n"""
+      val remaining = total - completed
+
+      s"""/home/pi/update-seven-segs $completed $remaining""" !
 
       bw.write(data)
     })
