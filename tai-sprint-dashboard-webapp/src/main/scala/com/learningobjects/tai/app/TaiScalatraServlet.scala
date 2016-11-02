@@ -1,12 +1,25 @@
 package com.learningobjects.tai.app
 
+import scala.io.Source
 import sys.process._
 
 class TaiScalatraServlet extends TaiSprintDashboardWebappStack {
 
+  implicit class SourceHelper(src:Source) {
+    def contents(): String = try {
+      src.getLines.map(_.trim).mkString("")
+    } finally {
+      src.close
+    }
+  }
+
+  get("/current-sprint.json") {
+    contentType = "text/json"
+    Source.fromFile("/tmp/current-sprint.json").contents
+  }
+
   get("/") {
-    val src = scala.io.Source.fromFile("/tmp/current-sprint.json")
-    val data = try src.getLines.map(_.trim).mkString("") finally src.close
+    val data = Source.fromURL("http://localhost:8080/current-sprint.json").contents
     contentType = "text/html"
     layoutTemplate("index.jade",
       ("pageTitle", "TAI Burndown"),
