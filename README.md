@@ -54,3 +54,6 @@ Data is appended to supplied file. If file doesn't exist, it is created with hea
 
 ## tai-sprint-dashboard-webapp ##
 A web application which displays the data fetched from JIRA
+
+## update-seven-segs ##
+A python script to update green and red seven segment displays

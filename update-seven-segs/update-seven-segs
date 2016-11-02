@@ -1,0 +1,29 @@
+#!/usr/bin/python
+
+import sys
+from Adafruit_LED_Backpack import SevenSegment
+
+SEG_ADDRS = [
+    0x70, # completed
+    0x71  # remaining
+]
+
+class Display:
+    def __init__(self, addr):
+        self.display = SevenSegment.SevenSegment(address=addr) 
+        self.display.begin()
+
+    def print_str(self, s):
+        self.display.clear()
+        self.display.print_number_str(s)
+        self.display.write_display()
+
+        
+
+if len(sys.argv) < 3:
+    raise Exception("Insufficient arguments specified, expected (completed, remaining)")
+
+displays = map(lambda addr: Display(addr), SEG_ADDRS)
+strings = sys.argv[1:3]
+for i in range(2):
+    displays[i].print_str(strings[i])
