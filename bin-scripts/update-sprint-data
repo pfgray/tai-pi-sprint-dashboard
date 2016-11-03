@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -e
+set -u
+
+cd ~/bin
+Output=~/data/update-sprint-data.csv
+java -jar update-sprint-data-assembly-1.0.jar $Output
+
+echo "See: $Output"
+
