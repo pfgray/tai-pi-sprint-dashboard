@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import scala.io.Source
 import sys.process._
+import org.scalatra._
+
 
 class TaiScalatraServlet extends TaiSprintDashboardWebappStack {
 
@@ -35,7 +37,7 @@ class TaiScalatraServlet extends TaiSprintDashboardWebappStack {
 
   implicit class DateHelper(date:Date) {
     def toShortIso8601(): String =
-      new SimpleDateFormat("dd/MM/yyyy").format(date);
+      new SimpleDateFormat("yyyy-MM-dd").format(date);
   }
 
   def debug(msg:String) = println(s"""DEBUG: $msg""")
@@ -49,12 +51,12 @@ class TaiScalatraServlet extends TaiSprintDashboardWebappStack {
     total: Double
   ) {
     def toHistory(): String = s"""
-    | {
-    |   "data": ${this.now},
-    |   "remaining": ${this.total - this.completed},
-    |   "completed": ${this.completed}
-    | }
-    """
+      {
+        "date": "${this.now.toShortIso8601}",
+        "remaining": ${this.total - this.completed},
+        "completed": ${this.completed}
+      }
+    """.trim
   }
 
   object CsvEntry {
@@ -81,9 +83,25 @@ class TaiScalatraServlet extends TaiSprintDashboardWebappStack {
   }
 
   get("/current-sprint.json") {
-    // TODO: Create json payload
-    contentType = "text/json"
-    Source.fromFile("/tmp/current-sprint.json").contents
+
+    contentType = "application/json" // doesn't appear to do anything...
+
+    val entries = dataFromCsv
+    log(entries.mkString("\n"))
+    val latest = entries.last
+
+    s"""{
+       "sprint": ${latest.name},
+       "remaining": "${latest.total - latest.completed}",
+       "completed": ${latest.completed},
+       "days_remaining": ${10 - entries.size},
+       "history": [
+          ${entries.map(_.toHistory).mkString(",\n")}
+       ]
+    }"""
+
+    // Sample data
+    //Source.fromFile("/tmp/current-sprint.json").contents
   }
 
   get("/") {
