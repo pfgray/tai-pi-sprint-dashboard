@@ -57,7 +57,7 @@ object Main {
       val data = s""""${sprint.name}",${sprintStart.getTime},${sprintEnd.getTime},${System.currentTimeMillis()},${completed},${total}\n"""
       val remaining = total - completed
 
-      s"""/home/pi/update-seven-segs $completed $remaining""" !
+      s"""/home/pi/bin/update-seven-segs $completed $remaining""" !
 
       bw.write(data)
     })
