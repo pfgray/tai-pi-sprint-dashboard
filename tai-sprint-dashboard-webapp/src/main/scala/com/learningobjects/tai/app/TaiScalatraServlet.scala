@@ -87,7 +87,6 @@ class TaiScalatraServlet extends TaiSprintDashboardWebappStack {
     contentType = "application/json" // doesn't appear to do anything...
 
     val entries = dataFromCsv
-    log(entries.mkString("\n"))
     val latest = entries.last
 
     s"""{
