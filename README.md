@@ -28,6 +28,22 @@ This can handle a combination of stories with and without subtasks, using the ab
 5. Set `jira.issuePointsFieldName` to the custom field name corresponding to your points field.
 6. Set `sprint.prefix` to a common String prefix for your sprints. (Used for identifying active sprint.)
 
+### Run
+
+```
+sbt run /path/to/output.csv
+```
+
+If the output file doesn't exist, the application will create it and add a header along with an entry containing the most recent data. (2 lines)
+
+If the output file exists, the application will assume the header already exists, and will just add the entry. (1 line)
+
+### Test
+
+```
+sbt test
+```
+
 ### Build
 
 Fat jar:
