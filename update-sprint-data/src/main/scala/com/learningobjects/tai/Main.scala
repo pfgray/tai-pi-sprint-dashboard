@@ -1,12 +1,11 @@
 package com.learningobjects.tai
 
-import java.io.{BufferedWriter, File, FileWriter}
 import java.net.HttpCookie
 import java.text.SimpleDateFormat
 
 import org.joda.time.DateTime
 
-import sys.process._
+//import sys.process._
 
 object Main {
 
@@ -16,7 +15,7 @@ object Main {
   def main(args: Array[String]): Unit = {
 
     if (args.length != 1) {
-      Console.err.println("Expecting 1 argument: path to output")
+      Console.err.println("Expecting 1 argument: <path to output>")
       System.exit(1)
     }
 
@@ -24,14 +23,8 @@ object Main {
 
     implicit val cookies: IndexedSeq[HttpCookie] = Jira.authenticate(username, password)
 
-    val file = new File(args(0))
-    val exists = file.exists()
-    val bw = new BufferedWriter(new FileWriter(file, true))
-
-    if (!exists) {
-      val header = s""""Name","Start","End","Now","Completed","Total"\n"""
-      bw.write(header)
-    }
+    val fileName = args(0)
+    val writer = JiraOutputWriter.open(fileName)
 
     Jira.activeSprint.foreach(sprint => {
 
@@ -54,15 +47,16 @@ object Main {
       val total = issues.map(JiraUtils.points).sum
       val completed = issues.map(JiraUtils.completedPoints).sum
 
-      val data = s""""${sprint.name}",${sprintStart.getTime},${sprintEnd.getTime},${System.currentTimeMillis()},${completed},${total}\n"""
-      val remaining = total - completed
+      writer.write(sprint, sprintStart, sprintEnd, System.currentTimeMillis(), completed, total)
 
-      s"""/home/pi/bin/update-seven-segs $completed $remaining""" !
-
-      bw.write(data)
+      //
+      // TODO: called separately
+      //
+//      val remaining = total - completed
+//      s"""/home/pi/bin/update-seven-segs $completed $remaining""" !
     })
 
-    bw.close
+    writer.close
   }
 
   /**
