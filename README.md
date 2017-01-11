@@ -71,5 +71,13 @@ Data is appended to supplied file. If file doesn't exist, it is created with hea
 ## tai-sprint-dashboard-webapp ##
 A web application which displays the data fetched from JIRA
 
+### Run
+
+```
+sbt run
+```
+
+Server should be listening on `http://localhost:8080`.
+
 ## bin-scripts ##
 Scripts used for updating data and refreshing displays.
