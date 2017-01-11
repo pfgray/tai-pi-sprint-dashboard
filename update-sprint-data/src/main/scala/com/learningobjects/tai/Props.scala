@@ -33,6 +33,6 @@ object Props {
   // For development-purposes only.
   //
   lazy val JiraUsername = prop("jira.username")
-  lazy val JiraPassword = prop("jira.password")
+  lazy val JiraPassword = prop("jira.password").map(_.toCharArray)
 
 }

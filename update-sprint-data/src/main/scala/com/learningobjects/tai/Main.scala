@@ -10,20 +10,17 @@ import org.joda.time.DateTime
 object Main {
 
   /**
-    *     (^-^*)/
+    * Run the update and write results to specified CSV file.
+    * @param username The JIRA username
+    * @param passwordChars The JIRA password (as char array)
+    * @param fileName The output filename. Will create if doesn't exist, else append.
     */
-  def main(args: Array[String]): Unit = {
+  def runUpdate(username:String, passwordChars:Array[Char], fileName: String): Unit = {
 
-    if (args.length != 1) {
-      Console.err.println("Expecting 1 argument: <path to output>")
-      System.exit(1)
-    }
-
-    val (username, password) = readCredentials
+    val password = new String(passwordChars)
 
     implicit val cookies: IndexedSeq[HttpCookie] = Jira.authenticate(username, password)
 
-    val fileName = args(0)
     val writer = JiraOutputWriter.open(fileName)
 
     Jira.activeSprint.foreach(sprint => {
@@ -52,17 +49,34 @@ object Main {
       //
       // TODO: called separately
       //
-//      val remaining = total - completed
-//      s"""/home/pi/bin/update-seven-segs $completed $remaining""" !
+      //      val remaining = total - completed
+      //      s"""/home/pi/bin/update-seven-segs $completed $remaining""" !
     })
 
     writer.close
   }
 
   /**
+    *     (^-^*)/
+    */
+  def main(args: Array[String]): Unit = {
+
+    if (args.length != 1) {
+      Console.err.println("Expecting 1 argument: <path to output>")
+      System.exit(1)
+    }
+
+    val (username, passwordChars) = readCredentials
+
+    val fileName = args(0)
+
+    runUpdate(username, passwordChars, fileName)
+  }
+
+  /**
     *     ( ˘▽˘)っ♨
     */
-  def readCredentials = {
+  def readCredentials: (String, Array[Char]) = {
 
     val username = Props.JiraUsername.getOrElse({
       print("Username: ")
@@ -71,7 +85,7 @@ object Main {
 
     val password = Props.JiraPassword.getOrElse({
       print("Password: ")
-      new String(System.console().readPassword())
+      System.console().readPassword()
     })
 
     (username, password)
