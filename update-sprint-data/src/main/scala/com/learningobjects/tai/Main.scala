@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat
 
 import org.joda.time.DateTime
 
-//import sys.process._
+import sys.process._
 
 object Main {
 
@@ -49,8 +49,8 @@ object Main {
       //
       // TODO: called separately
       //
-      //      val remaining = total - completed
-      //      s"""/home/pi/bin/update-seven-segs $completed $remaining""" !
+      val remaining = total - completed
+      s"""/home/pi/bin/update-seven-segs $completed $remaining""" !
     })
 
     writer.close
